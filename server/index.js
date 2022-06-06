@@ -8,6 +8,7 @@ var app = express();
 
 app.use(cors());
 const users = [{ id: 1, username: "Pasha", age: 28 }];
+let CurrentNumSides = 6;
 
 const createUser = (input) => {
   const id = Date.now();
@@ -16,6 +17,25 @@ const createUser = (input) => {
     ...input,
   };
 };
+
+class RandomDie {
+  constructor(numSides) {
+    this.numSides = numSides;
+  }
+
+  rollOnce() {
+    return 1 + Math.floor(Math.random() * this.numSides);
+  }
+
+  roll({ numRolls }) {
+    var output = [];
+    for (var i = 0; i < numRolls; i++) {
+      output.push(this.rollOnce());
+    }
+    return output;
+  }
+}
+
 var root = {
   getAllUsers: () => {
     return users;
@@ -28,6 +48,20 @@ var root = {
     const user = createUser(input);
     users.push(user);
     return user;
+  },
+  rollDice: (args) => {
+    var output = [];
+    for (var i = 0; i < args.numDice; i++) {
+      output.push(1 + Math.floor(Math.random() * (args.numSides || 6)));
+    }
+    return output;
+  },
+  getDie: ({ numSides }) => {
+    return new RandomDie(numSides || 6);
+  },
+  setNumSides: ({ numSides }) => {
+    CurrentNumSides = numSides;
+    return "Current num sides: " + CurrentNumSides;
   },
 };
 

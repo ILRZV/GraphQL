@@ -26,13 +26,22 @@ var schema = buildSchema(`
     content: String!
   }
 
+  type RandomDie {
+    rollOnce: Int!
+    rollTwice: Int!
+    roll(numRolls: Int!): [Int]
+  }
+  
   type Query {
     getAllUsers: [User]
     getUser(id: ID): User
+    rollDice(numDice: Int!, numSides: Int): [Int]
+    getDie(numSides: Int): RandomDie
   }
 
   type Mutation {
     createUser(input: UserInput): User
+    setNumSides(numSides: Int): String
   }
 `);
 
